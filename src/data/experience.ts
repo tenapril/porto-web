@@ -23,9 +23,14 @@ export const experience: Experience[] = [
     ],
     tools: ["Airflow", "AWS", "Snowflake", "QLIK", "Python", "Docker"],
     highlights: [
+      "Optimized ETL pipeline layers from 4 hours to 2.5 hours per run (~37.5% improvement)",
       "Led the Finance & Risk DE Team to generate multiple reports for Finance Closing, FP&A Reports, ECL, and Regulatory Reports",
+      "Handling critical pipelines shared via Snowflake SharedDB to key external partners",
+      "Acting as sprint leader, bridging DA requirements to the DE Team",
       "Migrating legacy pipelines to a more sustainable approach using ECS",
-      "Handling several high priority projects with external partners",
+      "Assessing SDLC changes from Product/Engineering to identify impacts on DA Dashboards",
+      "Maintaining and optimizing Snowflake costs with plans for further reduction",
+      "Improving team performance through hands-on guidance and streamlined documentation",
     ],
   },
   {
