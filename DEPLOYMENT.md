@@ -8,83 +8,33 @@ Deploy your Next.js portfolio site to Vercel via GitHub.
 
 - [Node.js](https://nodejs.org/) installed
 - [Git](https://git-scm.com/) installed
-- GitHub account (with `gh` CLI or browser)
+- [GitHub CLI](https://cli.github.com/) (`gh`) installed
 - Vercel account (https://vercel.com)
 
 ---
 
-## Step 1: Create a GitHub Repository
-
-Go to https://github.com/new and create a new repository:
-
-- **Name:** `porto-web` (or whatever you prefer)
-- **Visibility:** Public or Private
-- **Do NOT** initialize with README, .gitignore, or license (we already have local files)
-
-Click **Create repository**.
-
----
-
-## Step 2: Push Your Code to GitHub
-
-Run these commands from the project root (`/Users/andrew/porto-web`):
+## Step 1: Create a GitHub Repository (Done)
 
 ```bash
-# Stage all files
-git add .
-
-# Create the first commit
-git commit -m "Initial commit"
-
-# Add your GitHub repo as remote (replace YOUR_USERNAME)
-git remote add origin https://github.com/YOUR_USERNAME/porto-web.git
-
-# Push to GitHub
-git push -u origin main
+gh repo create porto-web --public --source=. --remote=origin --push
 ```
 
-> **Tip:** If you have `gh` CLI installed, you can do this instead:
-> ```bash
-> gh repo create porto-web --public --source=. --remote=origin --push
-> ```
+Repository: https://github.com/tenapril/porto-web
 
 ---
 
-## Step 3: Deploy to Vercel
-
-### Option A: Via Vercel Dashboard (Recommended)
+## Step 2: Deploy to Vercel
 
 1. Go to https://vercel.com/dashboard
 2. Click **"Add New..."** → **"Project"**
-3. Click **"Import Git Repository"** and select your `porto-web` repo
+3. Click **"Import Git Repository"** and select `porto-web`
 4. Vercel auto-detects Next.js — no configuration needed
 5. Click **"Deploy"**
-6. Wait for the build to finish. Your site will be live at `https://porto-web-xxxx.vercel.app`
-
-### Option B: Via Vercel CLI
-
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Login to Vercel
-vercel login
-
-# Deploy (from project root)
-vercel
-
-# Follow the prompts:
-# - Set up and deploy? Y
-# - Which scope? (select your account)
-# - Link to existing project? N
-# - Project name? porto-web
-# - Directory? ./
-# - Override settings? N
-```
+6. Wait for the build to finish — your site will be live at the provided `.vercel.app` URL
 
 ---
 
-## Step 4: Verify
+## Step 3: Verify
 
 1. Open the Vercel URL provided after deployment
 2. Check that all pages load correctly
@@ -92,26 +42,81 @@ vercel
 
 ---
 
-## Automatic Deployments
+## Pushing Updates (Day-to-Day Workflow)
 
-Once connected, Vercel will **automatically redeploy** every time you push to `main`:
+Once Vercel is connected to your GitHub repo, it **automatically redeploys** every time you push to `main`. Here's the workflow:
+
+### Quick push (most common)
 
 ```bash
-# Make changes, then:
 git add .
-git commit -m "Update something"
+git commit -m "Describe what you changed"
 git push
 ```
 
-Vercel also creates **preview deployments** for pull requests automatically.
+### Push specific files only
+
+```bash
+git add src/components/hero.tsx src/data/config.ts
+git commit -m "Update hero section and config"
+git push
+```
+
+### Check what changed before pushing
+
+```bash
+# See which files were modified
+git status
+
+# See the actual changes
+git diff
+
+# Then stage, commit, and push
+git add .
+git commit -m "Your message"
+git push
+```
+
+### Adding a new blog post
+
+```bash
+# After creating a new .mdx file in content/blog/
+git add content/blog/my-new-post.mdx
+git commit -m "Add new blog post: my-new-post"
+git push
+```
+
+> After every `git push`, Vercel will automatically build and deploy your updated site within ~30-60 seconds.
+
+---
+
+## Preview Deployments
+
+Vercel creates **preview deployments** for pull requests. To use this:
+
+```bash
+# Create a feature branch
+git checkout -b feature/new-section
+
+# Make changes, then push the branch
+git add .
+git commit -m "Add new section"
+git push -u origin feature/new-section
+
+# Create a PR (Vercel will auto-deploy a preview)
+gh pr create --title "Add new section" --body "Description of changes"
+```
+
+The preview URL will appear in the PR comments on GitHub.
 
 ---
 
 ## Summary
 
-| Step | Action |
-|------|--------|
-| 1 | Create GitHub repo |
-| 2 | `git add . && git commit && git push` |
-| 3 | Import repo in Vercel dashboard |
-| 4 | Site is live, auto-deploys on push |
+| Action | Command |
+|--------|---------|
+| Push changes | `git add . && git commit -m "message" && git push` |
+| Check status | `git status` |
+| View changes | `git diff` |
+| New branch | `git checkout -b feature/name` |
+| Create PR | `gh pr create` |

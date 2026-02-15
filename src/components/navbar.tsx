@@ -5,11 +5,11 @@ import Link from "next/link";
 import { siteConfig } from "@/data/config";
 
 const navLinks = [
-  { label: "About", href: "#about" },
-  { label: "Experience", href: "#experience" },
-  { label: "Projects", href: "#projects" },
+  { label: "About", href: "/#about" },
+  { label: "Experience", href: "/#experience" },
+  { label: "Projects", href: "/#projects" },
   { label: "Blog", href: "/blog" },
-  { label: "Contact", href: "#contact" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export function Navbar() {
@@ -49,25 +49,15 @@ export function Navbar() {
 
           {/* Desktop links */}
           <div className="hidden gap-8 md:flex">
-            {navLinks.map((link) =>
-              link.href.startsWith("#") ? (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  className="text-xs text-neutral-400 transition-colors hover:text-neutral-100"
-                >
-                  {link.label}
-                </a>
-              ) : (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="text-xs text-neutral-400 transition-colors hover:text-neutral-100"
-                >
-                  {link.label}
-                </Link>
-              )
-            )}
+            {navLinks.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="text-xs text-neutral-400 transition-colors hover:text-neutral-100"
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
 
           {/* Mobile hamburger */}
@@ -93,27 +83,16 @@ export function Navbar() {
       {/* Mobile overlay */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 bg-black/95 backdrop-blur-xl md:hidden">
-          {navLinks.map((link) =>
-            link.href.startsWith("#") ? (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className="text-2xl font-medium text-neutral-200 transition-colors hover:text-white"
-              >
-                {link.label}
-              </a>
-            ) : (
-              <Link
-                key={link.label}
-                href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className="text-2xl font-medium text-neutral-200 transition-colors hover:text-white"
-              >
-                {link.label}
-              </Link>
-            )
-          )}
+          {navLinks.map((link) => (
+            <Link
+              key={link.label}
+              href={link.href}
+              onClick={() => setMobileOpen(false)}
+              className="text-2xl font-medium text-neutral-200 transition-colors hover:text-white"
+            >
+              {link.label}
+            </Link>
+          ))}
         </div>
       )}
     </>
