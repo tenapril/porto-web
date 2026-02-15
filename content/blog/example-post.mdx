@@ -1,0 +1,61 @@
+---
+title: "Building Scalable Data Pipelines with Apache Beam and Dataflow"
+date: "2024-12-15"
+description: "A practical guide to designing and deploying streaming data pipelines using Apache Beam on Google Cloud Dataflow, with lessons learned from production workloads."
+tags: ["Data Engineering", "Apache Beam", "Google Cloud", "Streaming"]
+published: true
+---
+
+Data pipelines are the backbone of modern data infrastructure. In this post, I'll walk through the key design decisions and patterns I've found effective when building streaming pipelines with Apache Beam, deployed on Google Cloud Dataflow.
+
+## Why Apache Beam?
+
+Apache Beam provides a unified programming model for both batch and streaming data processing. The key advantage is portability — you write your pipeline once and run it on multiple execution engines (Dataflow, Spark, Flink).
+
+```python
+import apache_beam as beam
+
+with beam.Pipeline() as pipeline:
+    (
+        pipeline
+        | "Read" >> beam.io.ReadFromPubSub(topic="projects/my-project/topics/events")
+        | "Parse" >> beam.Map(parse_event)
+        | "Window" >> beam.WindowInto(beam.window.FixedWindows(60))
+        | "Aggregate" >> beam.CombinePerKey(sum)
+        | "Write" >> beam.io.WriteToBigQuery("my-project:dataset.table")
+    )
+```
+
+## Key Design Patterns
+
+### 1. Windowing Strategy
+
+Choosing the right windowing strategy is critical. Fixed windows work well for regular aggregations, but sliding windows are better for trend detection. Session windows shine when you need to group user activity with gaps.
+
+### 2. Error Handling with Dead Letter Queues
+
+Never let bad records kill your pipeline. Route unparseable messages to a dead letter topic for later inspection:
+
+```python
+def safe_parse(element):
+    try:
+        return [beam.pvalue.TaggedOutput("parsed", json.loads(element))]
+    except json.JSONDecodeError:
+        return [beam.pvalue.TaggedOutput("failed", element)]
+```
+
+### 3. Schema Evolution
+
+Production pipelines must handle schema changes gracefully. I recommend using a schema registry and validating incoming records against the expected schema before processing.
+
+## Lessons from Production
+
+After running streaming pipelines processing millions of events daily, here are the key takeaways:
+
+- **Idempotency matters.** Design your writes to be idempotent — exactly-once semantics are hard, but at-least-once with idempotent sinks is achievable and practical.
+- **Monitor watermarks.** Late data is inevitable. Set up alerts on watermark lag to catch issues before they compound.
+- **Cost optimization.** Use Dataflow's autoscaling, but set max workers to avoid surprise bills. Batch jobs with FlexRS can reduce costs by up to 40%.
+
+## Wrapping Up
+
+Building reliable streaming pipelines is as much about operational practices as it is about code. Start simple, add complexity only when needed, and invest heavily in monitoring and alerting.
