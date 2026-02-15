@@ -10,7 +10,7 @@ export const skills: SkillCategory[] = [
   },
   {
     category: "Big Data",
-    items: ["Apache Spark", "Kafka", "Flink", "Hadoop"],
+    items: ["Apache Spark", "Kafka", "Pub/Sub"],
   },
   {
     category: "Orchestration",
@@ -34,6 +34,6 @@ export const skills: SkillCategory[] = [
   },
   {
     category: "Other",
-    items: ["Git", "Linux", "REST APIs", "GraphQL"],
+    items: ["Git", "Linux", "REST APIs"],
   },
 ];

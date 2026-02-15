@@ -32,6 +32,17 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
         {project.description}
       </p>
 
+      <ul className="mt-3 space-y-1.5">
+        {project.highlights.map((highlight) => (
+          <li
+            key={highlight}
+            className="text-sm leading-relaxed text-neutral-400 before:mr-2 before:text-neutral-600 before:content-['▸']"
+          >
+            {highlight}
+          </li>
+        ))}
+      </ul>
+
       <div className="mt-4 flex flex-wrap gap-2">
         {project.techStack.map((tech) => (
           <span
